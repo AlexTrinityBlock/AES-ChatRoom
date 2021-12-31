@@ -238,7 +238,7 @@ class MainClassGUI:
 					try:
 						plainMsg=decrptFromBase64toString(msgJSONObject["msg"],self.secret)
 					except Exception as e:
-						plainMsg="Unkonw Cipher Text"
+						plainMsg="<<Unkonw Cipher Text>>"
 					#
 					self.cipherText.insert(END,msgJSONObject["name"]+": "+plainMsg+"\n")
 					self.cipherText.config(state = DISABLED)
