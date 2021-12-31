@@ -26,16 +26,16 @@ def buildConnections():
 			global numberOfClient
 
 			conn, addr = server.accept()
-			conn.send("NAME".encode(SOCKET_ENCODE))
+			conn.send("[server]show your name".encode(SOCKET_ENCODE))
 			name = conn.recv(4096).decode(SOCKET_ENCODE)
 
 			clientList.append({"name":name,"connect_object":conn})
 			print(f"Name is :{name}")
-			broadcasToClient(f"Client{name} join".encode(SOCKET_ENCODE))
+			broadcasToClient(f"Client: {name} join".encode(SOCKET_ENCODE))
 
 			numberOfClient+=1
 
-			conn.send('Connection successful!'.encode(SOCKET_ENCODE))
+			conn.send('Connection completed'.encode(SOCKET_ENCODE))
 			
 			thread = threading.Thread(target = connectHandler,args = (conn, addr))
 			thread.start()

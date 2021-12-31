@@ -2,15 +2,18 @@ import socket
 import threading
 from tkinter import *
 from tkinter import messagebox
+import json
+from util.CryptUtil import *
 
 PORT = 5050
 FONT_FORMAT = "utf-8"
 
 client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
-class GUI:
+class MainClassGUI:
 	serverIP="127.0.0.1"
-	
+	secret=bytes()
+
 	def __init__(self):
 		self.Window = Tk()
 		self.Window.withdraw()
@@ -25,6 +28,9 @@ class GUI:
 			print(e)
 			messagebox.showwarning("Student 1100336",e)
 			exit()
+
+	def setSecret(self,secretKey):
+		self.secret=hash256(secretKey)
 
 	def loginPage(self):
 		self.login = Tk()
@@ -93,11 +99,11 @@ class GUI:
 		self.continueBtn = Button(self.login,
 						text = "Enter",
 						font = "lucida 12 bold",
-						command = lambda: [self.socketConnect(self.entryIP.get()),self.goAhead(self.entryName.get())]
+						command = lambda: [self.setSecret(self.entrySecret.get()),self.socketConnect(self.entryIP.get()),self.changePageToChat(self.entryName.get())]
 						)
 		self.continueBtn.place(relx = 0.4,rely = 0.8)
 
-	def goAhead(self, name):
+	def changePageToChat(self, name):
 		self.login.destroy()
 		self.chatPage(name)
 		rcv = threading.Thread(target=self.receiveMessageAction)
@@ -155,7 +161,7 @@ class GUI:
 							width = 20,
 							height = 0.5,
 							bg = "#000000",
-							fg = "#00e622",
+							fg = "#FF0000",
 							font = "lucida 14",
 							padx = 5,
 							pady = 0)
@@ -177,14 +183,14 @@ class GUI:
 							relx = 0.011)
 		
 		self.messageInputBox.focus()
-		
+
 		# Btn of send message
 		self.buttonMsg = Button(self.labelBottom,
 								text = "Pass message",
 								font = "lucida 10 bold",
 								width = 20,
 								bg = "#ABB2B9",
-								command = lambda : self.sendMessageAction(self.messageInputBox.get()))
+								command = lambda : self.sendMessageAction(self.messageInputBox.get(),self.name))
 		
 		self.buttonMsg.place(relx = 0.77,
 							rely = 0.008,
@@ -192,16 +198,20 @@ class GUI:
 							relwidth = 0.22)
 		
 		self.cipherText.config(cursor = "arrow")
+		self.decodeText.config(cursor = "arrow")
 		
-		scrollbar = Scrollbar(self.cipherText)
-		scrollbar.place(relheight = 1,
-						relx = 0.974)
-		
-		scrollbar.config(command = self.cipherText.yview)
+		scrollbar1 = Scrollbar(self.cipherText)
+		scrollbar2 = Scrollbar(self.decodeText)
+		scrollbar1.place(relheight = 1,relx = 0.974)
+		scrollbar2.place(relheight = 1,relx = 0.974)
+		scrollbar1.config(command = self.cipherText.yview)
+		scrollbar2.config(command = self.decodeText.yview)
 	
 	#Send message action
-	def sendMessageAction(self, msg):
+	def sendMessageAction(self, msg,name):
+		msg='{"name":"'+name+'","msg":"'+msg+'"}'
 		self.cipherText.config(state = DISABLED)
+		self.decodeText.config(state = DISABLED)
 		self.msg=msg
 		self.messageInputBox.delete(0, END)
 		snd= threading.Thread(target = self.sendMessage)
@@ -210,21 +220,27 @@ class GUI:
 	def receiveMessageAction(self):
 		while True:
 			try:
-				message = client.recv(1024).decode(FONT_FORMAT)
+				message = client.recv(4096).decode(FONT_FORMAT)
 				
-				# if the messages from the server is NAME send the client's name
-				if message == 'NAME':
+				if message == '[server]show your name':
 					client.send(self.name.encode(FONT_FORMAT))
 				else:
-					# insert messages to text box
 					self.cipherText.config(state = NORMAL)
-					self.cipherText.insert(END,
-										message+"\n\n")
-					
+					self.decodeText.config(state = NORMAL)
+					msgJSONObject=dict()
+					try:
+						msgJSONObject=json.loads(message)
+					except Exception :
+						continue
+					#
+					self.cipherText.insert(END,msgJSONObject["name"]+": "+msgJSONObject["msg"]+"\n")
 					self.cipherText.config(state = DISABLED)
 					self.cipherText.see(END)
+					#
+					self.decodeText.insert(END,message+"\n")
+					self.decodeText.config(state = DISABLED)
+					self.decodeText.see(END)
 			except:
-				# an error will be printed on the command line or console if there's an error
 				print("An error occured!")
 				client.close()
 				break
@@ -232,8 +248,8 @@ class GUI:
 	def sendMessage(self):
 		self.cipherText.config(state=DISABLED)
 		while True:
-			message = (f"{self.name}: {self.msg}")
+			message = self.msg
 			client.send(message.encode(FONT_FORMAT))
 			break
 
-mainObject = GUI()
+mainObject = MainClassGUI()
