@@ -1,14 +1,10 @@
 from util.CryptUtil import *
 
-var1 = b"abc123"
+var1 = "abc123"
+key = hash256(var1)
 
-base64_bytes = base64.b64encode(var1)
-base64_message = base64_bytes.decode('ascii')
+c_text=encrptToBase64(var1,key)
 
-print(base64_message)
+print(c_text)
 
-base64_bytes = base64_message.encode('ascii')
-message_bytes = base64.b64decode(base64_bytes)
-message = message_bytes.decode('ascii')
-
-print(message)
+print(decrptFromBase64toString(c_text,key))

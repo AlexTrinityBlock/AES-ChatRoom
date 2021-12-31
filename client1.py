@@ -209,6 +209,7 @@ class MainClassGUI:
 	
 	#Send message action
 	def sendMessageAction(self, msg,name):
+		msg=encrptToBase64(msg,self.secret)
 		msg='{"name":"'+name+'","msg":"'+msg+'"}'
 		self.cipherText.config(state = DISABLED)
 		self.decodeText.config(state = DISABLED)
@@ -233,7 +234,13 @@ class MainClassGUI:
 					except Exception :
 						continue
 					#
-					self.cipherText.insert(END,msgJSONObject["name"]+": "+msgJSONObject["msg"]+"\n")
+					plainMsg=""
+					try:
+						plainMsg=decrptFromBase64toString(msgJSONObject["msg"],self.secret)
+					except Exception as e:
+						plainMsg="Unkonw Cipher Text"
+					#
+					self.cipherText.insert(END,msgJSONObject["name"]+": "+plainMsg+"\n")
 					self.cipherText.config(state = DISABLED)
 					self.cipherText.see(END)
 					#
