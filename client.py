@@ -1,4 +1,5 @@
 import socket
+import argparse
 import threading
 from tkinter import *
 from tkinter import messagebox
@@ -9,6 +10,16 @@ PORT = 5050
 FONT_FORMAT = "utf-8"
 
 client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+
+parser = argparse.ArgumentParser("python3 client.py")
+parser.add_argument("--GCM", help="use AES GCM on your chat room",action="store_true")
+parser.add_argument("--CCM", help="use AES CCM on your chat room",action="store_true")
+args = parser.parse_args()
+
+if args.CCM:
+	AES_MODE = "CCM"
+else:
+	AES_MODE = "GCM"
 
 class MainClassGUI:
 	serverIP="127.0.0.1"
@@ -209,7 +220,7 @@ class MainClassGUI:
 	
 	#Send message action
 	def sendMessageAction(self, msg,name):
-		msg=encrptToBase64(msg,self.secret)
+		msg=AESEncrypt(msg,self.secret,AES_MODE)
 		msg='{"name":"'+name+'","msg":"'+msg+'"}'
 		self.cipherText.config(state = DISABLED)
 		self.decodeText.config(state = DISABLED)
@@ -236,7 +247,7 @@ class MainClassGUI:
 					#
 					plainMsg=""
 					try:
-						plainMsg=decrptFromBase64toString(msgJSONObject["msg"],self.secret)
+						plainMsg=AESDecrypt(msgJSONObject["msg"],self.secret,AES_MODE)
 					except Exception as e:
 						plainMsg="<<Unkonw Cipher Text>>"
 					#
