@@ -63,8 +63,4 @@ python3 Client.py --CCM
 
 # Download Binary
 
-**Warning!!!**
- 
-**If you run on Windows,Please try to using python script because Microsoft Defender will autoremove this binary version RSA-AES program**
-
-[Ubuntu20.04]() 
+[Ubuntu20.04](https://github.com/AlexTrinityBlock/AES-ChatRoom/raw/master/download/AES-ChatRoom-Ubuntu20.04.zip) 
