@@ -1,5 +1,5 @@
 # AES-ChatRoom
-## AES-ChatRoom using AES CCM or GCM by 蕭維均
+AES-ChatRoom using AES CCM or GCM by 蕭維均
 
 # Enviroment requirement
 
