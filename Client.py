@@ -31,9 +31,7 @@ class MainClassGUI:
 		self.Window.withdraw()
 		self.loginPage()
 		self.Window.mainloop()
-		self.Window.protocol("WM_DELETE_WINDOW", self.close_window)
-	def close_window(self):
-		exit()
+		self.Window.protocol("WM_DELETE_WINDOW", exit)
 	def socketConnect(self,serverIP):
 		try:
 			print("Connect to server",serverIP)
@@ -48,7 +46,7 @@ class MainClassGUI:
 
 	def loginPage(self):
 		self.login = Tk()
-		self.login.protocol("WM_DELETE_WINDOW", self.close_window)
+		self.login.protocol("WM_DELETE_WINDOW", exit)
 		self.login.title("AES Secret Chat room")
 		##Input User name
 		self.login.resizable(width = False,
