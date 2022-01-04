@@ -119,6 +119,7 @@ class MainClassGUI:
 		self.login.destroy()
 		self.chatPage(name)
 		rcv = threading.Thread(target=self.receiveMessageAction)
+		rcv.daemon = True
 		rcv.start()
 
 	# The chat page
