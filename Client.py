@@ -31,7 +31,6 @@ class MainClassGUI:
 		self.Window.withdraw()
 		self.loginPage()
 		self.Window.mainloop()
-		self.Window.protocol("WM_DELETE_WINDOW", exit)
 	def socketConnect(self,serverIP):
 		try:
 			print("Connect to server",serverIP)
