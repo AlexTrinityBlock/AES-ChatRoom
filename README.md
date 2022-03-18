@@ -8,11 +8,11 @@ AES-ChatRoom using AES CCM or GCM
 
 # Authors
 
-嘉義大學(National Chiayi University,NCYU)
+嘉義大學 (National Chiayi University,NCYU)
 
-戴秀安(TAI HSIU-AN)
+戴秀安 (TAI HSIU-AN)
 
-蕭維均(HSIAO WEI-CHUN)
+蕭維均 (HSIAO WEI-CHUN)
 
 
 
