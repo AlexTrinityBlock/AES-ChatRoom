@@ -1,5 +1,18 @@
+![img](./img/Chat.png)
+
 # AES-ChatRoom
-AES-ChatRoom using AES CCM or GCM by 蕭維均
+
+建立在AES-CCM,AES-GCM加密演算法上的聊天軟體。
+
+AES-ChatRoom using AES CCM or GCM
+
+# Authors
+
+嘉義大學(National Chiayi University,NCYU)
+戴秀安(TAI HSIU-AN)
+蕭維均(HSIAO WEI-CHUN)
+
+
 
 # Enviroment requirement
 
